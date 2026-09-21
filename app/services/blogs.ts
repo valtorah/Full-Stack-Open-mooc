@@ -1,6 +1,6 @@
 import { desc, eq, ilike, sql } from "drizzle-orm"
 import { db } from "@/db"
-import { blogs } from "@/db/schema"
+import { blogs, readingList } from "@/db/schema"
 import { getCurrentUser } from "./session"
 
 export async function getBlogs(filter = "") {
@@ -27,6 +27,8 @@ export async function addBlog(data: { title: string; author: string; url: string
     .insert(blogs)
     .values({ ...data, userId: user.id })
     .returning()
+  // every blog a user adds goes to their reading list by default
+  await db.insert(readingList).values({ userId: user.id, blogId: blog.id })
   return blog
 }
 

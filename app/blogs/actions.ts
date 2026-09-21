@@ -4,6 +4,8 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { auth } from "@/auth";
 import { addBlog, likeBlog } from "../services/blogs";
+import { addToReadingList } from "../services/readingList";
+import { getCurrentUser } from "../services/session";
 
 type BlogFormState = {
   errors: { title?: string; author?: string; url?: string };
@@ -49,4 +51,16 @@ export async function likeBlogAction(formData: FormData) {
   await likeBlog(id);
   revalidatePath("/blogs");
   revalidatePath(`/blogs/${id}`);
+}
+
+export async function addToReadingListAction(formData: FormData) {
+  const user = await getCurrentUser();
+  if (!user) {
+    redirect("/login");
+  }
+
+  const blogId = Number(formData.get("blogId"));
+  await addToReadingList(user.id, blogId);
+  revalidatePath(`/blogs/${blogId}`);
+  revalidatePath("/me");
 }

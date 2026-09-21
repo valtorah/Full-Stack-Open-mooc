@@ -1,5 +1,7 @@
 import { redirect } from "next/navigation"
 import { getCurrentUser } from "../services/session"
+import Link from "next/link"
+import { getReadingList } from "../services/readingList"
 import { generateToken } from "./actions"
 
 export const dynamic = "force-dynamic"
@@ -9,6 +11,8 @@ export default async function MePage() {
   if (!user) {
     redirect("/login")
   }
+
+  const readingList = await getReadingList(user.id)
 
   return (
     <main className="mx-auto w-full max-w-2xl p-6">
@@ -21,6 +25,31 @@ export default async function MePage() {
         <p>
           Username: <span data-testid="user-username">{user.username}</span>
         </p>
+      </section>
+
+      <section data-testid="reading-list-section" className="mb-6">
+        <h2 className="mb-2 text-xl font-semibold">Reading list</h2>
+        {readingList.length === 0 ? (
+          <p data-testid="empty-reading-list" className="text-gray-500">
+            Your reading list is empty
+          </p>
+        ) : (
+          <ul className="space-y-2">
+            {readingList.map((item) => (
+              <li key={item.id}>
+                <Link
+                  href={`/blogs/${item.blog.id}`}
+                  className="text-blue-600 hover:underline"
+                >
+                  {item.blog.title}
+                </Link>{" "}
+                <span className="text-sm text-gray-500">
+                  ({item.read ? "read" : "unread"})
+                </span>
+              </li>
+            ))}
+          </ul>
+        )}
       </section>
 
       <section data-testid="api-token-section" className="mb-6">
