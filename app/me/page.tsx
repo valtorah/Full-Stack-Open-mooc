@@ -2,7 +2,7 @@ import { redirect } from "next/navigation"
 import { getCurrentUser } from "../services/session"
 import Link from "next/link"
 import { getReadingList } from "../services/readingList"
-import { generateToken } from "./actions"
+import { generateToken, markAsReadAction } from "./actions"
 
 export const dynamic = "force-dynamic"
 
@@ -13,6 +13,8 @@ export default async function MePage() {
   }
 
   const readingList = await getReadingList(user.id)
+  const unread = readingList.filter((item) => !item.read)
+  const read = readingList.filter((item) => item.read)
 
   return (
     <main className="mx-auto w-full max-w-2xl p-6">
@@ -34,21 +36,60 @@ export default async function MePage() {
             Your reading list is empty
           </p>
         ) : (
-          <ul className="space-y-2">
-            {readingList.map((item) => (
-              <li key={item.id}>
-                <Link
-                  href={`/blogs/${item.blog.id}`}
-                  className="text-blue-600 hover:underline"
-                >
-                  {item.blog.title}
-                </Link>{" "}
-                <span className="text-sm text-gray-500">
-                  ({item.read ? "read" : "unread"})
-                </span>
-              </li>
-            ))}
-          </ul>
+          <>
+            <div data-testid="unread-section" className="mb-4">
+              <h3 className="mb-2 font-semibold">Unread</h3>
+              {unread.length === 0 ? (
+                <p data-testid="no-unread-blogs" className="text-gray-500">
+                  No unread blogs
+                </p>
+              ) : (
+                <ul className="space-y-2">
+                  {unread.map((item) => (
+                    <li key={item.id} className="flex items-center gap-3">
+                      <Link
+                        href={`/blogs/${item.blog.id}`}
+                        className="text-blue-600 hover:underline"
+                      >
+                        {item.blog.title}
+                      </Link>
+                      <form action={markAsReadAction}>
+                        <input type="hidden" name="blogId" value={item.blog.id} />
+                        <button
+                          type="submit"
+                          data-testid={`mark-read-${item.blog.id}`}
+                          className="rounded bg-gray-700 px-2 py-1 text-sm text-white hover:bg-gray-600"
+                        >
+                          mark as read
+                        </button>
+                      </form>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
+            <div data-testid="read-section">
+              <h3 className="mb-2 font-semibold">Read</h3>
+              {read.length === 0 ? (
+                <p data-testid="no-read-blogs" className="text-gray-500">
+                  No read blogs
+                </p>
+              ) : (
+                <ul className="space-y-2">
+                  {read.map((item) => (
+                    <li key={item.id}>
+                      <Link
+                        href={`/blogs/${item.blog.id}`}
+                        className="text-blue-600 hover:underline"
+                      >
+                        {item.blog.title}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
+          </>
         )}
       </section>
 

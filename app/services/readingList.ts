@@ -21,3 +21,10 @@ export async function addToReadingList(userId: number, blogId: number) {
   // the unique (userId, blogId) constraint prevents duplicates
   await db.insert(readingList).values({ userId, blogId }).onConflictDoNothing()
 }
+
+export async function markAsRead(userId: number, blogId: number) {
+  await db
+    .update(readingList)
+    .set({ read: true })
+    .where(and(eq(readingList.userId, userId), eq(readingList.blogId, blogId)))
+}
