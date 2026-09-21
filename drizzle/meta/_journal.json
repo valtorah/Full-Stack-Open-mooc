@@ -22,6 +22,13 @@
       "when": 1789993522844,
       "tag": "0002_password_hash",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1789993794626,
+      "tag": "0003_token",
+      "breakpoints": true
     }
   ]
 }
