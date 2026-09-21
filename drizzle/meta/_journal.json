@@ -15,6 +15,13 @@
       "when": 1789989228787,
       "tag": "0001_users",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1789993522844,
+      "tag": "0002_password_hash",
+      "breakpoints": true
     }
   ]
 }
