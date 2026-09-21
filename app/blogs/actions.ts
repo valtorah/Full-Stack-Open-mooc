@@ -2,7 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-import { addBlog, likeBlog } from "../lib/blogs";
+import { addBlog, likeBlog } from "../services/blogs";
 
 export async function createBlog(formData: FormData) {
   const title = String(formData.get("title") ?? "").trim();
@@ -11,14 +11,14 @@ export async function createBlog(formData: FormData) {
 
   if (!title || !author || !url) return;
 
-  addBlog({ title, author, url });
+  await addBlog({ title, author, url });
   revalidatePath("/blogs");
   redirect("/blogs");
 }
 
 export async function likeBlogAction(formData: FormData) {
   const id = Number(formData.get("id"));
-  likeBlog(id);
+  await likeBlog(id);
   revalidatePath("/blogs");
   revalidatePath(`/blogs/${id}`);
 }

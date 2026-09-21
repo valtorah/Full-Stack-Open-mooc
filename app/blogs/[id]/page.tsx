@@ -1,12 +1,12 @@
 import { notFound } from "next/navigation";
-import { getBlog } from "../../lib/blogs";
+import { getBlog } from "../../services/blogs";
 import { likeBlogAction } from "../actions";
 
 export const dynamic = "force-dynamic";
 
 export default async function BlogPage({ params }: PageProps<"/blogs/[id]">) {
   const { id } = await params;
-  const blog = getBlog(Number(id));
+  const blog = await getBlog(Number(id));
   if (!blog) notFound();
 
   return (

@@ -1,12 +1,12 @@
 import Link from "next/link";
-import { getBlogs } from "../lib/blogs";
+import { getBlogs } from "../services/blogs";
 
 export const dynamic = "force-dynamic";
 
 export default async function BlogsPage({ searchParams }: PageProps<"/blogs">) {
   const { filter } = await searchParams;
   const term = typeof filter === "string" ? filter : "";
-  const blogs = getBlogs(term);
+  const blogs = await getBlogs(term);
 
   return (
     <main className="mx-auto w-full max-w-3xl p-6">

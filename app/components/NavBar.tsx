@@ -9,6 +9,9 @@ export default function NavBar() {
       <Link href="/blogs" className="font-medium hover:underline">
         Blogs
       </Link>
+      <Link href="/users" className="font-medium hover:underline">
+        Users
+      </Link>
     </nav>
   );
 }
