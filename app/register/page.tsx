@@ -1,10 +1,21 @@
 "use client"
 
-import { useActionState } from "react"
+import { useActionState, useEffect } from "react"
+import { useRouter } from "next/navigation"
+import { useNotification } from "../components/NotificationContext"
 import { registerUser } from "./actions"
 
 export default function RegisterPage() {
   const [state, formAction] = useActionState(registerUser, { errors: {} })
+  const { showNotification } = useNotification()
+  const router = useRouter()
+
+  useEffect(() => {
+    if (state.success) {
+      showNotification("registration successful, you can now log in")
+      router.push("/login")
+    }
+  }, [state, showNotification, router])
 
   return (
     <main className="mx-auto w-full max-w-3xl p-6">

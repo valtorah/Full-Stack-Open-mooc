@@ -8,6 +8,7 @@ import { addBlog, likeBlog } from "../services/blogs";
 type BlogFormState = {
   errors: { title?: string; author?: string; url?: string };
   values?: { title: string; author: string; url: string };
+  success?: boolean;
 };
 
 export async function createBlog(
@@ -40,7 +41,7 @@ export async function createBlog(
 
   await addBlog({ title, author, url });
   revalidatePath("/blogs");
-  redirect("/blogs");
+  return { errors: {}, success: true };
 }
 
 export async function likeBlogAction(formData: FormData) {

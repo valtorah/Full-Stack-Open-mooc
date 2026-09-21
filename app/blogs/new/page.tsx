@@ -1,6 +1,8 @@
 "use client";
 
-import { useActionState } from "react";
+import { useActionState, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { useNotification } from "../../components/NotificationContext";
 import { createBlog } from "../actions";
 
 const inputClass =
@@ -8,6 +10,15 @@ const inputClass =
 
 export default function NewBlogPage() {
   const [state, formAction] = useActionState(createBlog, { errors: {} });
+  const { showNotification } = useNotification();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (state.success) {
+      showNotification("blog created");
+      router.push("/blogs");
+    }
+  }, [state, showNotification, router]);
 
   return (
     <main className="mx-auto w-full max-w-3xl p-6">

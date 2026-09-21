@@ -1,6 +1,5 @@
 "use server"
 
-import { redirect } from "next/navigation"
 import bcrypt from "bcryptjs"
 import { eq } from "drizzle-orm"
 import { db } from "@/db"
@@ -14,6 +13,7 @@ type RegisterFormState = {
     passwordConfirm?: string
   }
   values?: { username: string; name: string }
+  success?: boolean
 }
 
 export const registerUser = async (
@@ -55,5 +55,5 @@ export const registerUser = async (
 
   await db.insert(users).values({ username, name, passwordHash })
 
-  redirect("/login")
+  return { errors: {}, success: true }
 }
