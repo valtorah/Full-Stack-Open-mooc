@@ -6,7 +6,7 @@ import { useNotification } from "../../components/NotificationContext";
 import { createBlog } from "../actions";
 
 const inputClass =
-  "rounded border border-zinc-300 px-2 py-1 dark:border-zinc-700 dark:bg-zinc-900";
+  "w-full rounded border border-gray-300 px-3 py-2 dark:border-zinc-700 dark:bg-zinc-900";
 
 export default function NewBlogPage() {
   const [state, formAction] = useActionState(createBlog, { errors: {} });
@@ -21,9 +21,9 @@ export default function NewBlogPage() {
   }, [state, showNotification, router]);
 
   return (
-    <main className="mx-auto w-full max-w-3xl p-6">
-      <h1 className="mb-4 text-2xl font-semibold">New blog</h1>
-      <form action={formAction} className="flex flex-col gap-3">
+    <main className="mx-auto w-full max-w-2xl p-6">
+      <h1 className="mb-4 text-2xl font-bold">New blog</h1>
+      <form action={formAction} className="flex flex-col gap-4">
         <div className="flex flex-col gap-1">
           <label htmlFor="title">Title</label>
           <input
@@ -72,7 +72,7 @@ export default function NewBlogPage() {
         <button
           type="submit"
           data-testid="create-blog-button"
-          className="self-start rounded border border-zinc-300 px-3 py-1 dark:border-zinc-700"
+          className="w-full rounded bg-blue-600 py-2 font-semibold text-white transition-colors hover:bg-blue-700"
         >
           Create
         </button>

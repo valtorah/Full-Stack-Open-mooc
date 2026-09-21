@@ -9,35 +9,38 @@ export default async function BlogsPage({ searchParams }: PageProps<"/blogs">) {
   const blogs = await getBlogs(term);
 
   return (
-    <main className="mx-auto w-full max-w-3xl p-6">
-      <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-2xl font-semibold">Blogs</h1>
-        <Link href="/blogs/new" className="font-medium hover:underline">
-          New blog
-        </Link>
-      </div>
+    <main className="mx-auto w-full max-w-2xl p-6">
+      <h1 className="mb-4 text-2xl font-bold">Blogs</h1>
       <form action="/blogs" className="mb-4 flex gap-2">
         <input
           type="text"
           name="filter"
           defaultValue={term}
           placeholder="Filter by title"
-          className="flex-1 rounded border border-zinc-300 px-2 py-1 dark:border-zinc-700 dark:bg-zinc-900"
+          data-testid="filter-input"
+          className="flex-1 rounded border border-gray-300 px-3 py-2 dark:border-zinc-700 dark:bg-zinc-900"
         />
-        <button type="submit" className="rounded border border-zinc-300 px-3 py-1 dark:border-zinc-700">
+        <button
+          type="submit"
+          data-testid="search-button"
+          className="rounded bg-blue-600 px-4 py-2 text-white hover:bg-blue-700"
+        >
           Search
         </button>
       </form>
       {blogs.length === 0 ? (
-        <p className="text-zinc-600 dark:text-zinc-400">No blogs found.</p>
+        <p className="text-gray-500">No blogs found.</p>
       ) : (
-        <ul className="flex flex-col gap-3">
+        <ul data-testid="blogs-list" className="space-y-2">
           {blogs.map((blog) => (
-            <li key={blog.id} className="rounded border border-zinc-200 p-4 dark:border-zinc-800">
-              <Link href={`/blogs/${blog.id}`} className="font-medium hover:underline">
+            <li
+              key={blog.id}
+              className="rounded border p-3 hover:bg-gray-50 dark:border-zinc-700 dark:hover:bg-zinc-900"
+            >
+              <Link href={`/blogs/${blog.id}`} className="text-blue-600 hover:underline">
                 {blog.title}
               </Link>
-              <div className="text-sm text-zinc-600 dark:text-zinc-400">
+              <div className="text-sm text-gray-500">
                 by {blog.author} · {blog.likes} likes
               </div>
             </li>

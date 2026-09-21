@@ -10,8 +10,8 @@ export default async function UserPage({ params }: PageProps<"/users/[username]"
   if (!user) notFound();
 
   return (
-    <main className="mx-auto w-full max-w-3xl p-6">
-      <h1 className="mb-4 text-2xl font-semibold">{user.name}</h1>
+    <main className="mx-auto w-full max-w-2xl p-6">
+      <h1 className="mb-4 text-2xl font-bold">{user.name}</h1>
       <h2 className="mb-2 text-lg font-medium">Added blogs</h2>
       {user.blogs.length === 0 ? (
         <p className="text-zinc-600 dark:text-zinc-400">No blogs added.</p>
@@ -19,7 +19,7 @@ export default async function UserPage({ params }: PageProps<"/users/[username]"
         <ul className="flex flex-col gap-2">
           {user.blogs.map((blog) => (
             <li key={blog.id}>
-              <Link href={`/blogs/${blog.id}`} className="hover:underline">
+              <Link href={`/blogs/${blog.id}`} className="text-blue-600 hover:underline">
                 {blog.title}
               </Link>
             </li>
