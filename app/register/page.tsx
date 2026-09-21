@@ -1,27 +1,67 @@
+"use client"
+
+import { useActionState } from "react"
 import { registerUser } from "./actions"
 
 export default function RegisterPage() {
+  const [state, formAction] = useActionState(registerUser, { errors: {} })
+
   return (
     <main className="mx-auto w-full max-w-3xl p-6">
       <h2 className="mb-4 text-2xl font-semibold">Register</h2>
-      <form action={registerUser}>
+      <form action={formAction}>
         <div>
-          <label>
-            Username
-            <input type="text" name="username" required />
-          </label>
+          <label htmlFor="username">Username</label>
+          <input
+            id="username"
+            type="text"
+            name="username"
+            defaultValue={state.values?.username}
+            required
+          />
+          {state.errors.username && (
+            <p data-testid="username-error" style={{ color: "red" }}>
+              {state.errors.username}
+            </p>
+          )}
         </div>
         <div>
-          <label>
-            Name
-            <input type="text" name="name" required />
-          </label>
+          <label htmlFor="name">Name</label>
+          <input
+            id="name"
+            type="text"
+            name="name"
+            defaultValue={state.values?.name}
+            required
+          />
+          {state.errors.name && (
+            <p data-testid="name-error" style={{ color: "red" }}>
+              {state.errors.name}
+            </p>
+          )}
         </div>
         <div>
-          <label>
-            Password
-            <input type="password" name="password" required />
-          </label>
+          <label htmlFor="password">Password</label>
+          <input id="password" type="password" name="password" required />
+          {state.errors.password && (
+            <p data-testid="password-error" style={{ color: "red" }}>
+              {state.errors.password}
+            </p>
+          )}
+        </div>
+        <div>
+          <label htmlFor="passwordConfirm">Confirm Password</label>
+          <input
+            id="passwordConfirm"
+            type="password"
+            name="passwordConfirm"
+            required
+          />
+          {state.errors.passwordConfirm && (
+            <p data-testid="passwordConfirm-error" style={{ color: "red" }}>
+              {state.errors.passwordConfirm}
+            </p>
+          )}
         </div>
         <button type="submit" data-testid="register-button">
           Register
