@@ -5,10 +5,15 @@ import { redirect } from "next/navigation";
 import { auth } from "@/auth";
 import { addBlog, likeBlog } from "../services/blogs";
 
+type BlogFormState = {
+  errors: { title?: string; author?: string; url?: string };
+  values?: { title: string; author: string; url: string };
+};
+
 export async function createBlog(
-  prevState: { errors: { title?: string; author?: string; url?: string } },
+  prevState: BlogFormState,
   formData: FormData,
-) {
+): Promise<BlogFormState> {
   const session = await auth();
   if (!session) {
     redirect("/login");
@@ -18,7 +23,7 @@ export async function createBlog(
   const author = String(formData.get("author") ?? "").trim();
   const url = String(formData.get("url") ?? "").trim();
 
-  const errors: { title?: string; author?: string; url?: string } = {};
+  const errors: BlogFormState["errors"] = {};
   if (title.length < 5) {
     errors.title = "Title must be at least 5 characters long";
   }
@@ -30,7 +35,7 @@ export async function createBlog(
   }
 
   if (Object.keys(errors).length > 0) {
-    return { errors };
+    return { errors, values: { title, author, url } };
   }
 
   await addBlog({ title, author, url });

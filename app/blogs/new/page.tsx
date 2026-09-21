@@ -15,7 +15,13 @@ export default function NewBlogPage() {
       <form action={formAction} className="flex flex-col gap-3">
         <div className="flex flex-col gap-1">
           <label htmlFor="title">Title</label>
-          <input id="title" name="title" type="text" className={inputClass} />
+          <input
+            id="title"
+            name="title"
+            type="text"
+            defaultValue={state.values?.title}
+            className={inputClass}
+          />
           {state.errors.title && (
             <p data-testid="title-error" className="text-sm text-red-600">
               {state.errors.title}
@@ -24,7 +30,13 @@ export default function NewBlogPage() {
         </div>
         <div className="flex flex-col gap-1">
           <label htmlFor="author">Author</label>
-          <input id="author" name="author" type="text" className={inputClass} />
+          <input
+            id="author"
+            name="author"
+            type="text"
+            defaultValue={state.values?.author}
+            className={inputClass}
+          />
           {state.errors.author && (
             <p data-testid="author-error" className="text-sm text-red-600">
               {state.errors.author}
@@ -33,7 +45,13 @@ export default function NewBlogPage() {
         </div>
         <div className="flex flex-col gap-1">
           <label htmlFor="url">URL</label>
-          <input id="url" name="url" type="text" className={inputClass} />
+          <input
+            id="url"
+            name="url"
+            type="text"
+            defaultValue={state.values?.url}
+            className={inputClass}
+          />
           {state.errors.url && (
             <p data-testid="url-error" className="text-sm text-red-600">
               {state.errors.url}
