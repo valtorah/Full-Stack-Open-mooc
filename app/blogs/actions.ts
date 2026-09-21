@@ -5,7 +5,10 @@ import { redirect } from "next/navigation";
 import { auth } from "@/auth";
 import { addBlog, likeBlog } from "../services/blogs";
 
-export async function createBlog(formData: FormData) {
+export async function createBlog(
+  prevState: { errors: { title?: string; author?: string; url?: string } },
+  formData: FormData,
+) {
   const session = await auth();
   if (!session) {
     redirect("/login");
@@ -15,7 +18,20 @@ export async function createBlog(formData: FormData) {
   const author = String(formData.get("author") ?? "").trim();
   const url = String(formData.get("url") ?? "").trim();
 
-  if (!title || !author || !url) return;
+  const errors: { title?: string; author?: string; url?: string } = {};
+  if (title.length < 5) {
+    errors.title = "Title must be at least 5 characters long";
+  }
+  if (author.length < 5) {
+    errors.author = "Author must be at least 5 characters long";
+  }
+  if (url.length < 5) {
+    errors.url = "URL must be at least 5 characters long";
+  }
+
+  if (Object.keys(errors).length > 0) {
+    return { errors };
+  }
 
   await addBlog({ title, author, url });
   revalidatePath("/blogs");
