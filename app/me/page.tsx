@@ -1,18 +1,24 @@
 import { redirect } from "next/navigation"
-import { getCurrentUser } from "../services/session"
+import { auth } from "@/auth"
 import Link from "next/link"
-import { getReadingList } from "../services/readingList"
+import { getUserWithReadingList } from "../services/users"
 import { generateToken, markAsReadAction } from "./actions"
 
 export const dynamic = "force-dynamic"
 
 export default async function MePage() {
-  const user = await getCurrentUser()
+  const session = await auth()
+  if (!session?.user?.email) {
+    redirect("/login")
+  }
+
+  // the user and the reading list come from a single query
+  const user = await getUserWithReadingList(session.user.email)
   if (!user) {
     redirect("/login")
   }
 
-  const readingList = await getReadingList(user.id)
+  const readingList = user.readingList
   const unread = readingList.filter((item) => !item.read)
   const read = readingList.filter((item) => item.read)
 
